@@ -25,7 +25,26 @@
 class XPFixesMutator extends ROMutator
     config(Mutator_XPFixes);
 
+function NotifyLogin(Controller NewPlayer)
+{
+    local ROPlayerController ROPC;
 
+    ROPC = ROPlayerController(NewPlayer);
+    if (ROPC != None
+        && ROPC.PlayerReplicationInfo != None
+        && ROPC.PlayerReplicationInfo.bEgsClient
+    )
+    {
+        `xpflog("performing early stats init for"
+            @ ROPC @ ROPC.PlayerReplicationInfo.PlayerName
+            @ ROPC.PlayerReplicationInfo.UniqueId
+        );
+
+        ROPC.InitializeStats();
+    }
+
+    super.NotifyLogin(NewPlayer);
+}
 
 DefaultProperties
 {
