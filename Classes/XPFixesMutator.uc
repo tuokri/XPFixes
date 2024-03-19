@@ -37,7 +37,7 @@ function NotifyLogin(Controller NewPlayer)
     {
         `xpflog("performing early stats init for"
             @ ROPC @ ROPC.PlayerReplicationInfo.PlayerName
-            @ ROPC.PlayerReplicationInfo.UniqueId
+            @ class'ROSteamUtils'.static.UniqueIdToSteamId64(ROPC.PlayerReplicationInfo.UniqueId)
         );
 
         ROPC.InitializeStats();
