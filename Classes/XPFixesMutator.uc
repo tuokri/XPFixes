@@ -46,6 +46,24 @@ function NotifyLogin(Controller NewPlayer)
     super.NotifyLogin(NewPlayer);
 }
 
+`if(`isdefined(XPFIXES_DEBUG))
+
+function ROMutate(string MutateString, PlayerController Sender, out string ResultMsg)
+{
+    local array<string> Args;
+
+    Args = SplitString(MutateString);
+
+    if (Locs(Args[0]) == "endmatch")
+    {
+        ROGameInfo(WorldInfo.Game).MatchWon(0, ROWC_MatchEndTime, 0, 0, 0);
+    }
+
+    super.ROMutate(MutateString, Sender, ResultMsg);
+}
+
+`endif
+
 DefaultProperties
 {
 
