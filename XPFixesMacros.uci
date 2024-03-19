@@ -1,4 +1,4 @@
-`define XPFIXES_DEBUG 1
+// `define XPFIXES_DEBUG 1
 
 `define xpflog(msg, cond, tag) \
     `log(self.class.name $ "::" $ GetFuncName() $ "(): " $ `msg, \
