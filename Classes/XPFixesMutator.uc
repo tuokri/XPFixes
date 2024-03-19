@@ -25,19 +25,37 @@
 class XPFixesMutator extends ROMutator
     config(Mutator_XPFixes);
 
+// Naive check based on ID length. Always 17 for Steam clients.
+// **SHOULD** be less than 17 for all EGS clients.
+function bool IsEgsClient(string SteamID)
+{
+    return Len(SteamID) < 17;
+}
+
 function NotifyLogin(Controller NewPlayer)
 {
     local ROPlayerController ROPC;
 
+`if(`isdefined(XPFIXES_DEBUG))
+    `xpflog("NewPlayer:" @ NewPlayer
+        @ "PC" @ PlayerController(NewPlayer)
+        @ "PRI" @ PlayerController(NewPlayer).PlayerReplicationInfo
+        @ "SteamId64" @ ROPlayerReplicationInfo(NewPlayer.PlayerReplicationInfo).SteamId64
+        @ "bEgsClient" @ PlayerController(NewPlayer).PlayerReplicationInfo.bEgsClient
+        @ "IsEgsClient" @ IsEgsClient(ROPlayerReplicationInfo(NewPlayer.PlayerReplicationInfo).SteamId64)
+    );
+`endif
+
     ROPC = ROPlayerController(NewPlayer);
     if (ROPC != None
         && ROPC.PlayerReplicationInfo != None
-        && ROPC.PlayerReplicationInfo.bEgsClient
+        && IsEgsClient(ROPlayerReplicationInfo(ROPC.PlayerReplicationInfo).SteamId64)
+        // && ROPC.PlayerReplicationInfo.bEgsClient // TODO: this does not work this early?
     )
     {
         `xpflog("performing early stats init for"
             @ ROPC @ ROPC.PlayerReplicationInfo.PlayerName
-            @ class'ROSteamUtils'.static.UniqueIdToSteamId64(ROPC.PlayerReplicationInfo.UniqueId)
+            @ ROPlayerReplicationInfo(ROPC.PlayerReplicationInfo).SteamId64
         );
 
         ROPC.InitializeStats();
