@@ -84,5 +84,4 @@ function ROMutate(string MutateString, PlayerController Sender, out string Resul
 
 DefaultProperties
 {
-
 }
